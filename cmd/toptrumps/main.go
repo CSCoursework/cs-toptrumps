@@ -13,7 +13,7 @@ func main() {
 
 	helpers.ClearConsole()
 
-	fmt.Println("Top trumps, but it's planes and only has 8 cards")
+	fmt.Printf("Top trumps, but it's planes and only has %d cards\n", len(cards.AllCards))
 	fmt.Println()
 	time.Sleep(time.Second)
 
