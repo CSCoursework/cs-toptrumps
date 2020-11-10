@@ -1,0 +1,58 @@
+[
+    {
+        "Name":"Airbus A320-241",
+        "NumEngines":2,
+        "MaxPax":150,
+        "Range":3300,
+        "Cost":101000000
+    },
+    {
+        "Name":"Boeing 747-8i",
+        "NumEngines":4,
+        "MaxPax":467,
+        "Range":7730,
+        "Cost":418400000
+    },
+    {
+        "Name":"Lockheed L-1011-1 Tristar",
+        "NumEngines":3,
+        "MaxPax":256,
+        "Range":2680,
+        "Cost":134160000
+    },
+    {
+        "Name":"Airbus A340-500",
+        "NumEngines":4,
+        "MaxPax":310,
+        "Range":9000,
+        "Cost":297500000
+    },
+    {
+        "Name":"Boeing 737-800",
+        "NumEngines":2,
+        "MaxPax":160,
+        "Range":2935,
+        "Cost":106100000
+    },
+    {
+        "Name":"Boeing 787-8",
+        "NumEngines":2,
+        "MaxPax":242,
+        "Range":7355,
+        "Cost":145000000
+    },
+    {
+        "Name":"Airbus A350-1000",
+        "NumEngines":2,
+        "MaxPax":242,
+        "Range":8700,
+        "Cost":366500000
+    },
+    {
+        "Name":"Boeing 777-300ER",
+        "NumEngines":2,
+        "MaxPax":365,
+        "Range":7370,
+        "Cost":375500000
+    }
+]
