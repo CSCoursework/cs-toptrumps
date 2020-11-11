@@ -17,8 +17,6 @@ func main() {
 	fmt.Println()
 	time.Sleep(time.Second)
 
-	a, b := cards.SplitCards()
-
-	g := game.New([...][]cards.Card{a, b})
+	g := game.New(cards.SplitCards(game.NumPlayers))
 	g.Run()
 }
