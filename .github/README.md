@@ -39,7 +39,7 @@ sudo chmod +x ./toptrumps
 
 ## What is Top Trumps?
 
-Top Trumps is a card game that is usually played between two players. Each set contains a deck of cards, each with an individual name, and usually four or five attributes. These cards all follow a consistent theme across the entire deck, for example, about TV shows like Top Gear or Disney characters.
+Top Trumps is a card game that is usually played between two players. Each set of the game contains a deck of cards, each with an individual name, and usually four or five attributes. These cards all follow a consistent theme across the entire deck, for example, about TV shows like Top Gear or Disney characters.
 
 Players take turns to choose an attribute from the top-most card in their hand, which they compare to the same attribute on all the other players' cards. The player with the highest value for that one attributes gets to keep all the other players' cards. 
 
@@ -67,7 +67,7 @@ The vast majority of the code in this project is stored in packages in the `/int
 * `helpers`: contains miscellaneous functions used in various places around the program
   * For example, functions to clear the console
 * `input`: contains functions to collect input from the user
-* `cards`: contains logic and structs related to card
+* `cards`: contains logic and structs related to cards
   * For example, loading cards from JSON and dealing decks
 
 Code is broken down into small functions where possible, to ensure that code is not duplicated and to make reusing code easier.
@@ -80,26 +80,24 @@ In order to prevent import loops, a package hierarchy is in place: the `main` pa
 
 ### Clearing the display
 
-During the game, it will be necessary to clear the console periodically to prevent it becoming to cluttered.
+During the game, it will be necessary to clear the console periodically to prevent it becoming cluttered.
 
 Unlike in C# and other languages, Go has no built in method to do this. If we want to clear the console, we have to write a function that manually calls the system command.
 
 ```go
 package helpers
 
-import (
-	// ...
-)
+// ...
 
 func ClearConsole() {
 	var cmd *exec.Cmd
-    // Depending on the platform we're running on, we need to choose a different command.
+	// Depending on the platform we're running on, we need to choose a different command.
 	if runtime.GOOS == "windows" {
 		cmd = exec.Command("cmd", "/c", "cls")
 	} else {
 		cmd = exec.Command("clear")
 	}
-    // The output of the command is set to the current command line that we're playing the game on.
+	// The output of the command is set to the current command line that we're playing the game on.
 	cmd.Stdout = os.Stdout
 	_ = cmd.Run() // Run that command and ignore any errors
 }
@@ -130,7 +128,7 @@ func Int(prompt string) int {
 		if err != nil {
 			fmt.Println("Number is not an integer.")
 		} else {
-			return int(n) // strconv.ParseInt returns an int64
+			return int(n) // strconv.ParseInt returns an int64, we must conver it to an int
 		}
 	}
 }
@@ -156,7 +154,7 @@ func Options(prompt string, items []string) (int, string) {
 
 ### Defining the `Card` type
 
-The first thing we need to do is define a `Card` struct, to marshal our cards JSON in to so that we can use them in our program.
+The first thing we need to do is define a `Card` struct to marshal our card definitions into so that we can use them in our program.
 
 ```go
 package cards
@@ -235,15 +233,17 @@ Card information is originally defined in a `cards.json` file that looks like th
         "Range":9000,
         "Cost":297500000
     },
-    // etc
+    {
+        "etc": "etc"
+    }
 ]
 ```
 
-However, in order to make the game simpler for the user (so they don't have to worry about having specific files in the right place), we can bundle the contents of the `cards.json` file into our program at compile time. As a result, our game can be distributed as a single binary, instead of multiple files that have to be in specific locations relative to each other.
+However, in order to make the game simpler for the user (so they don't have to worry about having specific files in the right place), we can bundle the contents of the `cards.json` file into our program at compile time. As a result, our game can be distributed as a single binary file, instead of multiple files that have to be in specific locations relative to each other.
 
-There is currently no built in way to do this in Go, so we can use a tool called `go-bindata` to generate some Go code that contains our file contents and some helper functions to access it. Because this is a command line program, we can define the command that needs to be run in order to generate our code file using a `go:generate` directive.
+There is currently no built in way to do this in Go, so we can use a tool called `go-bindata`. This works by generating Go code that contains the contents of our file contents and some helper functions to access it. Because `go-bindata` is a command line program, we can define the command that needs to be run in order to generate our code file using a `go:generate` directive.
 
-Once this directive is defined, you can use the `go generate <pkgname>` command to run it. For example, to generate the code for the `cards` package, you could run `go generate github.com/codemicro/cs-toptrumps/internal/cards`. This would work from any directory, as the `go generate` tool deals with working directories for you.
+Once this directive is defined, you can use the `go generate <pkgname>` command to run it. For example, to generate the code for the `cards` package, you could run `go generate github.com/codemicro/cs-toptrumps/internal/cards`.
 
 This command must be run before the program is compiled, to properly update the cards.
 
@@ -269,7 +269,7 @@ var (
 	AvailCards []Card // Like AllCards, but is modified when cards are removed from the deck
 )
 
-// init runs automagically on package initialisation (when it's imported by another package)
+// init runs automagically on package initialisation (when the `cards` package is imported by another package)
 func init() {
 	// Load all card info from cards.json, which is a bundled file
 
@@ -355,7 +355,7 @@ type Game struct {
 }
 ```
 
-To accompany this type, we create a `New` function that we can use to create a new instance of `Game`. This is required because it has unexported fields that can't be set outside of the `game` package.
+To accompany this type, we create a `New` function that we can use to create a new instance of `Game`. This is required because the struct has unexported fields that can't be set outside of the `game` package.
 
 ```go
 // New creates a new instance of `Game`, based on the decks provided.
@@ -375,7 +375,7 @@ func New(decks [][]cards.Card) *Game {
 
 ### The game loop
 
-You'll notice that a lot of the code in this function is written using loops, that iterate over the `NumPlayers` constant. Theoretically, the value of this could be changed, and the entire game loop would work as normal, just with 
+You'll notice that a lot of the code in this function is written using loops that iterate over the `NumPlayers` constant. Theoretically, the value of this could be changed, and the entire game loop would work as normal, just with a different number of players.
 
 ```go
 package game 
@@ -520,7 +520,7 @@ func (g *Game) Run() {
 
 ## The entry point
 
-With all the rest of the code completed, all we now need is a place for the program to start at. This is the job of the `main` function, in the `main` package.
+With all the rest of the code completed, all we now need is an entry point. This is the job of the `main` function, in the `main` package.
 
 ```go
 package main
@@ -556,7 +556,7 @@ And with that, our program is complete!
 The program should:
 
 * have a master set of cards that can be defined as JSON and parsed
-  * This has been met, and (sort of) exceeded
+  * This has been met
 * randomly create evenly sized decks of cards for each player
   * This has been met
 * be built in such a way that it should be possible to increase the number of players playing the game by changing one constant
