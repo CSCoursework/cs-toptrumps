@@ -177,7 +177,7 @@ You may have noticed that our struct has extra data attached to each attribute. 
 >
 > - https://stackoverflow.com/a/30889373
 
-In our case, we can use it to store the readable name of each attribute. To retrieve these values, we need to use reflection, as alluded to by the above explanation. To do this, we will attach a pair of methods to our struct.
+In our case, we can use it to store the readable name of each attribute. This also means that if we wanted to add any new attributes in the future, we could do so easily without having to modify any code in the main game loop, since we will be only ever referencing values from our cards by struct tag values. To retrieve these values, we need to use reflection, as alluded to by the above explanation. To do this, we will attach a pair of methods to our struct.
 
 ```go
 package cards
