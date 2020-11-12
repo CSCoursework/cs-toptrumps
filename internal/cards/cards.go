@@ -72,7 +72,7 @@ var (
 func init() {
 	// Load all card info from cards.json, which is a bundled file
 
-	fCont := MustAsset("cards.json")
+	fCont := MustAsset("cards.json") // MustAsset is a function from the generated code.
 
 	err := json.Unmarshal(fCont, &AllCards)
 	if err != nil {
